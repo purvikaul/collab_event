@@ -29,8 +29,7 @@
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="24dp"
-            android:src="@drawable/logo"
-            android:layout_weight="0.13" />
+            android:src="@drawable/logo" />
 
         <!--Email-->
         <android.support.design.widget.TextInputLayout
@@ -80,13 +79,25 @@
             android:text="Login"
             android:textStyle="bold" />
 
-        <ImageView
-            android:layout_width="match_parent"
+        <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:scaleType="fitXY"-->
+        <!--android:id="@+id/facebook_signin"-->
+        <!--android:src="@drawable/login_with_facebook" />-->
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/facebook_login_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:scaleType="fitXY"
-            android:id="@+id/facebook_signin"
-            android:src="@drawable/login_with_facebook" />
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="45dp" />
 
         <TextView
             android:id="@+id/link_signup"
@@ -95,7 +106,7 @@
             android:layout_marginBottom="24dp"
             android:gravity="center"
             android:text="No account yet? Sign Up"
-            android:textSize="16dip" />
+            android:textSize="16dp" />
 
 
     </LinearLayout>

@@ -7,7 +7,9 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,6 +20,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +31,20 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,11 +78,41 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private TextView mSignUp;
     private View mProgressView;
     private View mLoginFormView;
+    private CallbackManager facebookCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+        AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
+
+        //        https://developers.facebook.com/docs/facebook-login/android
+        facebookCallbackManager = CallbackManager.Factory.create();
+//        LoginButton loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
+        Log.d("DEBUG", "Login Activity initialized");
+
+        // Callback registration
+        LoginManager.getInstance().registerCallback(facebookCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                successfulFacebookLogin(loginResult);
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+                Log.d("DEBUG", "Facebook login cancelled");
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+                Log.d("DEBUG", "Error logging into Facebook");
+            }
+        });
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -103,6 +150,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void successfulFacebookLogin(LoginResult loginResult) {
+        Log.d("DEBUG", "Facebook login successful!");
+        AccessToken accessToken = loginResult.getAccessToken();
+        Log.d("DEBUG", "Access Token: " + accessToken.getToken());
+        Log.d("DEBUG", "User ID: " + accessToken.getUserId());
+
     }
 
 
