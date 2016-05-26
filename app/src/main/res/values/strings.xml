@@ -16,4 +16,7 @@
     </string>
     <string name="title_activity_signup">Sign in</string>
     <string name="facebook_app_id">286274578379696</string>
+    <string name="server_ip">192.168.1.144:8000/</string>
+    <string name="signup_url">android/signup</string>
+
 </resources>
