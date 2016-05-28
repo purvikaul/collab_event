@@ -10,7 +10,7 @@ public class Event {
     private String name;
     private Date date;
     private String venue;
-    private String description;
+    private String imgURL;
 
     public Event() {
     }
@@ -19,11 +19,10 @@ public class Event {
         this.name = name;
     }
 
-    public Event(String name, Date date, String venue, String description) {
+    public Event(String name, Date date, String venue) {
         this.name = name;
         this.date = date;
         this.venue = venue;
-        this.description = description;
     }
 
     public Event(String name, String venue) {

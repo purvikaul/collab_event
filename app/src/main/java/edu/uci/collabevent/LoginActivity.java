@@ -3,6 +3,7 @@ package edu.uci.collabevent;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -37,8 +38,17 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -256,7 +266,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(email, password, getApplicationContext());
             mAuthTask.execute((Void) null);
         }
     }
@@ -325,6 +335,52 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
+
+    private void postSignupData(String email, String password, Context context) throws IOException {
+
+        URL url = new URL(context.getString(R.string.server_ip) + context.getString(R.string.signin_url));
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        connection.setReadTimeout(10000);
+        connection.setConnectTimeout(15000);
+        connection.setRequestMethod("POST");
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+
+        Uri.Builder builder = new Uri.Builder()
+                .appendQueryParameter("email", email)
+                .appendQueryParameter("password", password);
+        String query = builder.build().getEncodedQuery();
+
+        OutputStream os = connection.getOutputStream();
+        BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(os, "UTF-8"));
+        writer.write(query);
+
+        writer.flush();
+        writer.close();
+        os.close();
+
+        int responseCode = connection.getResponseCode();
+        Log.d("DEBUG", "\nSending 'POST' request to URL : " + url);
+        Log.d("DEBUG", "Post parameters : " + query);
+        Log.d("DEBUG", "Response Code : " + responseCode);
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        //print result
+        Log.d("DEBUG", response.toString());
+
+        //   connection.connect();
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -333,29 +389,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private final Context mContext;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String email, String password, Context context) {
             mEmail = email;
             mPassword = password;
+            mContext = context;
         }
+
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
+                postSignupData(mEmail, mPassword, mContext);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             // TODO: register the new account here.
