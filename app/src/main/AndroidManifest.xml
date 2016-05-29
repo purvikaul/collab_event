@@ -29,7 +29,7 @@
             android:theme="@style/AppTheme.Login" />
         <activity
             android:name=".EventListActivity"
-            android:label="Your List"></activity>
+            android:label="Events"></activity>
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"

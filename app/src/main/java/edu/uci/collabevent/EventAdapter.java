@@ -38,7 +38,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         venueView.setText(event.getVenue());
 
         TextView dateView = viewHolder.eventDate;
-        dateView.setText((CharSequence) event.getDate());
+        dateView.setText(Event.displayDateFormat.format(event.getDate()));
     }
 
 
