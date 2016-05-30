@@ -25,7 +25,11 @@ public class SplashActivity extends AppCompatActivity {
 
     private static int SPLASH_TIME_OUT = 3000;
     public static CookieManager cmrCookieMan;
-    private Context context;
+    private static Context context;
+
+    public static Context getContext() {
+        return context;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +107,7 @@ public class SplashActivity extends AppCompatActivity {
             Log.d("DEBUG", "In postExecute");
             Log.d("DEBUG", "In postExecute, Response: " + response);
             if (!response.isEmpty() && response.equals("True")) {
-                Intent I = new Intent(SplashActivity.this, EventListActivity.class);
+                Intent I = new Intent(SplashActivity.this, HomeActivity.class);
                 startActivity(I);
             } else {
                 Intent I = new Intent(SplashActivity.this, LoginActivity.class);

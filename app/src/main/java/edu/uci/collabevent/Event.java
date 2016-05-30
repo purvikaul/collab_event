@@ -1,8 +1,10 @@
 package edu.uci.collabevent;
 
+import android.util.Log;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONArray;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,7 +39,10 @@ public class Event {
             e.printStackTrace();
         }
         try {
-            this.imgURL = new URL(R.string.server_ip + imgURL);
+            Log.d("DEBUG_IMG", imgURL);
+            this.imgURL = new URL(SplashActivity.getContext().getString(R.string.server_ip) + imgURL);
+            Log.d("DEBUG_NEW_IMG", imgURL);
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -89,16 +94,9 @@ public class Event {
         return imgURL;
     }
 
-    public static ArrayList<Event> createEvents(int num) {
-        ArrayList<Event> events = new ArrayList<>();
-        for (int i = 0; i < num; i++) {
-            events.add(new Event("Event" + i + 1));
-        }
-        return events;
-    }
-
     public static ArrayList<Event> createEventsFromJSON(String EventsJSON) {
         ArrayList<Event> eventsList = new ArrayList<Event>();
+        Log.d("DEBUG-JSON", EventsJSON);
         try {
             JSONArray reader = new JSONArray(EventsJSON);
 

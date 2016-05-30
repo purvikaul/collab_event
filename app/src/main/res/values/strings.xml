@@ -16,11 +16,18 @@
     </string>
     <string name="title_activity_signup">Sign in</string>
     <string name="facebook_app_id">286274578379696</string>
-    <string name="server_ip">http://169.234.65.14:8000/</string>
+    <string name="server_ip">http://192.168.1.144:8000/</string>
     <string name="signup_url">android/signup/</string>
     <string name="signin_url">android/signin/</string>
     <string name="test_cookie_url">android/test_cookie/</string>
     <string name="events_list_url">android/events_list</string>
+    <string name="tasks_list_url">android/tasks_list</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

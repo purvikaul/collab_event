@@ -2,9 +2,11 @@ package edu.uci.collabevent;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -39,6 +41,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         TextView dateView = viewHolder.eventDate;
         dateView.setText(Event.displayDateFormat.format(event.getDate()));
+
+        ImageView imageView = viewHolder.eventImage;
+        DownloadImageTask downloadImageTask = new DownloadImageTask(imageView);
+        Log.d("DEBUG-IMG", event.getImgURL().toString());
+        downloadImageTask.execute(event.getImgURL().toString());
+
     }
 
 
@@ -52,12 +60,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         public TextView eventName;
         public TextView eventVenue;
         public TextView eventDate;
+        public ImageView eventImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
             eventName = (TextView) itemView.findViewById(R.id.event_name);
             eventVenue = (TextView) itemView.findViewById(R.id.event_venue);
             eventDate = (TextView) itemView.findViewById(R.id.event_date);
+            eventImage = (ImageView) itemView.findViewById(R.id.event_image);
         }
 
     }

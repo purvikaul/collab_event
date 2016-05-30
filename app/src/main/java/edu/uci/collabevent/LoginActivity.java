@@ -19,6 +19,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -44,11 +46,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+    ProgressDialog progressDialog = null;
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -224,9 +226,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return;
         }
 
-        final ProgressDialog progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setIndeterminate(true);
-        //  progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("Authenticating....");
         progressDialog.show();
 
@@ -336,10 +337,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
-    private void postSignupData(String email, String password, Context context) throws IOException {
+    private String postSignupData(String email, String password, Context context) throws IOException {
 
         URL url = new URL(context.getString(R.string.server_ip) + context.getString(R.string.signin_url));
-        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setReadTimeout(10000);
         connection.setConnectTimeout(15000);
         connection.setRequestMethod("POST");
@@ -377,6 +378,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         //print result
         Log.d("DEBUG", response.toString());
+        return response.toString();
 
         //   connection.connect();
     }
@@ -385,7 +387,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, String> {
 
         private final String mEmail;
         private final String mPassword;
@@ -399,27 +401,37 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+            String response = new String();
             try {
-                postSignupData(mEmail, mPassword, mContext);
+                response = postSignupData(mEmail, mPassword, mContext);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             // TODO: register the new account here.
-            return true;
+            return response;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final String response) {
             mAuthTask = null;
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+            progressDialog.dismiss();
+            if (!response.isEmpty() && response.equals("Success")) {
+                Intent I = new Intent(mContext, HomeActivity.class);
+                startActivity(I);
+            } else if (!response.isEmpty() && response.equals("Email Error")) {
+                mEmailView.setError("Email does not exist");
+                mEmailView.requestFocus();
+            } else if (!response.isEmpty() && response.equals("Password Error")) {
+                mPasswordView.setError("Email/Password do not match");
                 mPasswordView.requestFocus();
+            } else {
+                CharSequence text = "Something went wrong!";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(mContext, text, duration);
+                toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
+                toast.show();
             }
         }
 

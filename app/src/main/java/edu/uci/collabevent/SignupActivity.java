@@ -374,7 +374,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
             mAuthTask = null;
             progressDialog.dismiss();
             if (!response.isEmpty() && response.equals("Success")) {
-                Intent I = new Intent(mContext, EventListActivity.class);
+                Intent I = new Intent(mContext, HomeActivity.class);
                 startActivity(I);
             } else if (!response.isEmpty() && response.equals("Duplicate email")) {
                 mEmailView.setError("Email already exists");
