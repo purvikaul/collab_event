@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,6 +26,7 @@ public class TaskListFragment extends Fragment {
     private ProgressDialog progressDialog = null;
     private TasksListTask listFetchTask;
     private RecyclerView taskCard;
+    private SwipeRefreshLayout swipeContainer;
 
     public TaskListFragment() {
         // Required empty public constructor
@@ -41,13 +43,20 @@ public class TaskListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_tasks, container, false);
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         taskCard = (RecyclerView) view.findViewById(R.id.taskCard);
         assert taskCard != null;
-        fetchTasks();
+        fetchTasks(true);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchTasks(false);
+            }
+        });
         return view;
     }
 
-    private void fetchTasks() {
+    private void fetchTasks(Boolean showProgress) {
         Context context = getActivity();
         listFetchTask = new TasksListTask();
         listFetchTask.execute();
@@ -56,7 +65,9 @@ public class TaskListFragment extends Fragment {
         progressDialog = new ProgressDialog(getActivity(), ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading....");
-        progressDialog.show();
+        if (showProgress) {
+            progressDialog.show();
+        }
 
     }
 
@@ -112,6 +123,7 @@ public class TaskListFragment extends Fragment {
             TaskAdapter adapter = new TaskAdapter(tasks);
             taskCard.setAdapter(adapter);
             taskCard.setLayoutManager(new LinearLayoutManager(mContext));
+            swipeContainer.setRefreshing(false);
 
         }
     }

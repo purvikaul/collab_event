@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,6 +31,7 @@ public class EventListFragment extends Fragment {
     private ProgressDialog progressDialog = null;
     private EventsListTask listFetchTask;
     private RecyclerView eventCard;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,15 +44,22 @@ public class EventListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.activity_events, container, false);
+        final View view = inflater.inflate(R.layout.activity_events, container, false);
         eventCard = (RecyclerView) view.findViewById(R.id.eventCard);
+        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         assert eventCard != null;
-        fetchEvents();
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fetchEvents(true);
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchEvents(false);
+            }
+        });
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent I = new Intent(getActivity(), LoginActivity.class);
+                Intent I = new Intent(getActivity(), CreateEvent.class);
                 startActivity(I);
             }
         });
@@ -62,16 +71,19 @@ public class EventListFragment extends Fragment {
 //        super.onActivityCreated(savedInstanceState);
 //    }
 
-    private void fetchEvents() {
+    private void fetchEvents(Boolean showProgess) {
         Context context = getActivity();
         listFetchTask = new EventsListTask();
         listFetchTask.execute();
 
         // Show loading dialog box.
+
         progressDialog = new ProgressDialog(getActivity(), ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading....");
+        if (showProgess) {
         progressDialog.show();
+        }
 
     }
 
@@ -126,6 +138,7 @@ public class EventListFragment extends Fragment {
             EventAdapter adapter = new EventAdapter(events);
             eventCard.setAdapter(adapter);
             eventCard.setLayoutManager(new LinearLayoutManager(mContext));
+            swipeContainer.setRefreshing(false);
 
         }
     }

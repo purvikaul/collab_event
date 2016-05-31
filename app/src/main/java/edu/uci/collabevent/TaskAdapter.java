@@ -2,6 +2,7 @@ package edu.uci.collabevent;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
         TextView dateView = viewHolder.dueDate;
         if (task.getDueDate() != null) {
-            dateView.setText(Task.displayDateFormat.format(task.getDueDate()));
+            dateView.setText(Html.fromHtml("<b>Due Date : </b>") + Task.displayDateFormat.format(task.getDueDate()));
         }
         ImageView imageView = viewHolder.statusImage;
 //        DownloadImageTask downloadImageTask = new DownloadImageTask(imageView);
