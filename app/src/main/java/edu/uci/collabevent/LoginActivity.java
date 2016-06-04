@@ -226,10 +226,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return;
         }
 
-        progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating....");
-        progressDialog.show();
+
 
         // Reset errors.
         mEmailView.setError(null);
@@ -267,6 +264,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+            progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Authenticating....");
+            progressDialog.show();
             mAuthTask = new UserLoginTask(email, password, getApplicationContext());
             mAuthTask.execute((Void) null);
         }

@@ -169,11 +169,6 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
             return;
         }
 
-        progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Signing up....");
-        progressDialog.show();
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -219,6 +214,10 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+            progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Signing up....");
+            progressDialog.show();
             mAuthTask = new UserSignupTask(name, email, password, getApplicationContext());
             mAuthTask.execute((Void) null);
         }
