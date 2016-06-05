@@ -26,7 +26,7 @@
     <string name="tasks_list_url">android/tasks_list/</string>
     <string name="create_event_url">android/create_event/</string>
     <string name="friend_list">android/friends_list/</string>
-
+    <string name="invitations_list_url">android/invitations_list/</string>
 
     <string name="title_activity_home">HomeActivity</string>
     <string name="action_settings">Settings</string>

@@ -56,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new EventListFragment(), "Events");
         adapter.addFragment(new TaskListFragment(), "Tasks");
+        adapter.addFragment(new InvitationListFragment(), "Invitations");
         viewPager.setAdapter(adapter);
     }
 

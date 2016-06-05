@@ -44,10 +44,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             dateView.setText(Html.fromHtml("<b>Due Date : </b>") + Task.displayDateFormat.format(task.getDueDate()));
         }
         ImageView imageView = viewHolder.statusImage;
-//        DownloadImageTask downloadImageTask = new DownloadImageTask(imageView);
-//        Log.d("DEBUG-IMG", task.getImgURL().toString());
-//        downloadImageTask.execute(task.getImgURL().toString());
 
+        // Put a check mark in the imageView if the task has been completed.
+        if (task.getTaskStatus() == TaskStatus.COMPLETED) {
+            imageView.setImageResource(R.drawable.ic_done_black_18dp);
+        }
     }
 
 
