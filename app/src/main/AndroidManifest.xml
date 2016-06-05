@@ -55,7 +55,10 @@
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CreateEvent"></activity>
+        <activity
+            android:name=".CreateEvent"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Form"></activity>
     </application>
 
 </manifest>

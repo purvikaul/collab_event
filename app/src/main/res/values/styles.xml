@@ -17,11 +17,15 @@
         <!--<item name="android:windowSharedElementExitTransition">@android:transition/move</item>-->
     </style>
 
+    <style name="AppTheme.Form">
+        <item name="colorAccent">@color/form_accent</item>
+    </style>
+
     <style name="AppTheme.Login" parent="Theme.AppCompat.NoActionBar"></style>
 
     <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <!--<item name="windowActionBar">false</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
