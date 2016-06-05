@@ -43,9 +43,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         dateView.setText(Event.displayDateFormat.format(event.getDate()));
 
         ImageView imageView = viewHolder.eventImage;
-        DownloadImageTask downloadImageTask = new DownloadImageTask(imageView);
-        Log.d("DEBUG-IMG", event.getImgURL().toString());
-        downloadImageTask.execute(event.getImgURL().toString());
+        String imgUrl = event.getImgURL().toString();
+        if (!imgUrl.endsWith("null")) {
+            DownloadImageTask downloadImageTask = new DownloadImageTask(imageView);
+            Log.d("DEBUG-IMG", imgUrl);
+            downloadImageTask.execute(imgUrl);
+        }
 
     }
 

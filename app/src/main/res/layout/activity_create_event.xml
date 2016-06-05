@@ -129,8 +129,11 @@
                 android:id="@+id/event_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minLines="4"
+                android:lines="6"
+                android:singleLine="false"
                 android:hint="Description"
-                android:inputType="textCapSentences" />
+                android:inputType="textCapSentences|textImeMultiLine" />
         </android.support.design.widget.TextInputLayout>
 
         <RelativeLayout

@@ -20,6 +20,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     protected Bitmap doInBackground(String... urls) {
         String urldisplay = urls[0];
+        Log.d("DEBUG_IMG", urldisplay);
         Log.d("IMG-DEBUG", urldisplay);
         Bitmap mIcon11 = null;
         try {
