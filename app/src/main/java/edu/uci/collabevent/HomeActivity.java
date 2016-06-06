@@ -53,17 +53,11 @@ public class HomeActivity extends AppCompatActivity {
     NavigationView mNavigationView;
     private TextView mName;
     private TextView mEmail;
-//    private ListView mDrawerList;
-//    private ArrayAdapter<String> mAdapter;
 
     private boolean mUserLearnedDrawer;
-    private boolean mFromSavedInstanceState;
-    private int mCurrentSelectedPosition;
-
 
     private static final String PREFERENCES_FILE = "mymaterialapp_settings";
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
-    private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,17 +67,12 @@ public class HomeActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         //  getSupportActionBar().hide();
-
+        mUserLearnedDrawer = Boolean.valueOf(readSharedSetting(getApplicationContext(), PREF_USER_LEARNED_DRAWER, "false"));
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        if (savedInstanceState != null) {
-            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
-        }
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         setUpNavDrawer();
-
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -93,13 +82,11 @@ public class HomeActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_item_1:
                         Toast.makeText(HomeActivity.this, "Profile", Toast.LENGTH_SHORT).show();
-                        mCurrentSelectedPosition = 0;
                         return true;
                     case R.id.navigation_item_2:
                         Toast.makeText(HomeActivity.this, "Sign Out", Toast.LENGTH_SHORT).show();
                         SignOutTask signOutTask = new SignOutTask();
                         signOutTask.execute();
-                        mCurrentSelectedPosition = 1;
                         return true;
                     default:
                         return true;
@@ -116,9 +103,6 @@ public class HomeActivity extends AppCompatActivity {
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
-
-//        addDrawerItems();
-
 
     }
 
@@ -163,12 +147,6 @@ public class HomeActivity extends AppCompatActivity {
         adapter.addFragment(new InvitationListFragment(), "Invitations");
         viewPager.setAdapter(adapter);
     }
-
-//    private void addDrawerItems() {
-//        String[] osArray = { "Profile","Events", "Tasks", "Inivtes","Linux" };
-//        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
-//        mDrawerList.setAdapter(mAdapter);
-//    }
 
 
     @Override
@@ -224,29 +202,15 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION, 0);
-        Menu menu = mNavigationView.getMenu();
-        menu.getItem(mCurrentSelectedPosition).setChecked(true);
-    }
-
     public static void saveSharedSetting(Context ctx, String settingName, String settingValue) {
-        SharedPreferences sharedPref = ctx.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(settingName, settingValue);
         editor.apply();
     }
 
     public static String readSharedSetting(Context ctx, String settingName, String defaultValue) {
-        SharedPreferences sharedPref = ctx.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);
         return sharedPref.getString(settingName, defaultValue);
     }
 
@@ -260,25 +224,9 @@ public class HomeActivity extends AppCompatActivity {
             connection.setConnectTimeout(15000);
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
-//            connection.setDoOutput(true);
-//
-//            Uri.Builder builder = new Uri.Builder()
-//                    .appendQueryParameter("email", email)
-//                    .appendQueryParameter("password", password);
-//            String query = builder.build().getEncodedQuery();
-//
-//            OutputStream os = connection.getOutputStream();
-//            BufferedWriter writer = new BufferedWriter(
-//                    new OutputStreamWriter(os, "UTF-8"));
-//            writer.write(query);
-//
-//            writer.flush();
-//            writer.close();
-//            os.close();
 
             int responseCode = connection.getResponseCode();
-            Log.d("DEBUG", "\nSending 'POST' request to URL : " + url);
-//            Log.d("DEBUG", "Post parameters : " + query);
+            Log.d("DEBUG", "\nSending 'GET' request to URL : " + url);
             Log.d("DEBUG", "Response Code : " + responseCode);
 
             BufferedReader in = new BufferedReader(

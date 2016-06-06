@@ -105,7 +105,7 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
         private int position;
 
         AcceptTask(int p) {
-            this.position = position;
+            this.position = p;
         }
 
 
@@ -166,7 +166,7 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
         private int position;
 
         RejectTask(int p) {
-            this.position = position;
+            this.position = p;
         }
 
 

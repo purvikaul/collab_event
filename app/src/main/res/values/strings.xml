@@ -29,7 +29,7 @@
     <string name="friend_list">android/friends_list/</string>
     <string name="invitations_list_url">android/invitations_list/</string>
     <string name="invitation_accept_url">android/accept_invite/</string>
-    <string name="invitation_reject_url">android/accept_reject/</string>
+    <string name="invitation_reject_url">android/reject_invite/</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
