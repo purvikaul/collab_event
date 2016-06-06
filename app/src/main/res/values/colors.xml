@@ -8,5 +8,9 @@
     <color name="floating_button_color">#FF6A32</color>
     <color name="login_background">#006064</color>
     <color name="login_button_bkg">#0097A7</color>
+    <color name="accept_green">#1a8b1a</color>
+    <color name="reject_red">#bc261c</color>
+    <color name="invitation_btn_background">#eeeeee</color>
+    <color name="invitation_btn_pressed">#757575</color>
 
 </resources>

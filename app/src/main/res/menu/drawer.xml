@@ -11,7 +11,7 @@
             android:title="Profile" />
         <item
             android:id="@+id/navigation_item_2"
-            android:icon="@drawable/ic_add_white_18dp"
+            android:icon="@drawable/ic_exit_to_app_white_18dp"
             android:title="Sign Out" />
 
     </group>

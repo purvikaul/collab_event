@@ -50,16 +50,11 @@ public class SplashActivity extends AppCompatActivity {
             URL url = null;
             try {
                 List<HttpCookie> cookies = cmrCookieMan.getCookieStore().get(new URI(context.getString(R.string.server_ip)));
-                Log.d("DEBUG", "In try1 : doInBackground");
                 if (cookies.size() > 0) {
-                    Log.d("DEBUG", "Cookie Size" + cookies.size());
-                    Log.d("DEBUG", "In if in  doInBackground");
                     try {
-                        Log.d("DEBUG", "In try2 : doInBackground");
                         url = new URL(context.getString(R.string.server_ip) + context.getString(R.string.test_cookie_url));
                         HttpURLConnection connection = null;
                         try {
-                            Log.d("DEBUG", "In try3 : doInBackground");
                             connection = (HttpURLConnection) url.openConnection();
                             connection.setReadTimeout(5000);
                             connection.setConnectTimeout(3000);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ public class InvitationListFragment extends Fragment {
     private InvitationsListTask listFetchTask;
     private RecyclerView invitationCard;
     private SwipeRefreshLayout swipeContainer;
+    private InvitationAdapter adapter;
 
     public InvitationListFragment() {
         // Required empty public constructor
@@ -48,6 +50,7 @@ public class InvitationListFragment extends Fragment {
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         invitationCard = (RecyclerView) view.findViewById(R.id.invitationCard);
         assert invitationCard != null;
+
         fetchInvitations(true);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -122,11 +125,10 @@ public class InvitationListFragment extends Fragment {
             progressDialog.dismiss();
             invitationCard.setHasFixedSize(true);
 
-            InvitationAdapter adapter = new InvitationAdapter(invitations);
+            adapter = new InvitationAdapter(invitations);
             invitationCard.setAdapter(adapter);
             invitationCard.setLayoutManager(new LinearLayoutManager(mContext));
             swipeContainer.setRefreshing(false);
-
         }
     }
 }

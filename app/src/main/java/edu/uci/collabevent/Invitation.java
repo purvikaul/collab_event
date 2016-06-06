@@ -24,13 +24,14 @@ public class Invitation {
     private String venue;
     private Integer membersCount;
     private Integer invitedCount;
+    private Integer id;
 
 
     public Invitation(String name) {
         this.name = name;
     }
 
-    public Invitation(String name, String date, String venue, Integer membersCount, Integer invitedCount) {
+    public Invitation(String name, String date, String venue, Integer membersCount, Integer invitedCount, Integer id) {
         this.name = name;
         this.venue = venue;
         try {
@@ -40,11 +41,12 @@ public class Invitation {
         }
         this.membersCount = membersCount;
         this.invitedCount = invitedCount;
+        this.id = id;
 
     }
 
 
-    public Invitation(String name, String date, String venue) {
+    public Invitation(String name, String date, String venue, Integer id) {
         this.name = name;
         try {
             this.date = parseDateFormat.parse(date);
@@ -52,10 +54,12 @@ public class Invitation {
             e.printStackTrace();
         }
         this.venue = venue;
+        this.id = id;
     }
 
-    public Invitation(String name, String date) {
+    public Invitation(String name, String date, Integer id) {
         this.name = name;
+        this.id = id;
         try {
             this.date = parseDateFormat.parse(date);
         } catch (ParseException e) {
@@ -82,14 +86,15 @@ public class Invitation {
             JSONArray reader = new JSONArray(InvitationsJSON);
 
             for (int i = 0; i < reader.length(); i++) {
-                JSONObject jsonEvent = reader.getJSONObject(i);
-                String eventName = jsonEvent.getString("name");
-                String eventDate = jsonEvent.getString("time");
-                String eventVenue = jsonEvent.getString("venue");
-                Integer eventMembersCount = jsonEvent.getInt("members_count");
-                Integer eventInvitedCount = jsonEvent.getInt("invited_count");
+                JSONObject jsonInvite = reader.getJSONObject(i);
+                String inviteName = jsonInvite.getString("name");
+                String inviteDate = jsonInvite.getString("time");
+                String inviteVenue = jsonInvite.getString("venue");
+                Integer inviteMembersCount = jsonInvite.getInt("members_count");
+                Integer inviteInvitedCount = jsonInvite.getInt("invited_count");
+                Integer inviteId = jsonInvite.getInt("id");
 
-                Invitation invitation = new Invitation(eventName, eventDate, eventVenue, eventMembersCount, eventInvitedCount);
+                Invitation invitation = new Invitation(inviteName, inviteDate, inviteVenue, inviteMembersCount, inviteInvitedCount, inviteId);
                 invitations.add(invitation);
             }
 
@@ -107,5 +112,9 @@ public class Invitation {
 
     public Integer getInvitedCount() {
         return invitedCount;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }
