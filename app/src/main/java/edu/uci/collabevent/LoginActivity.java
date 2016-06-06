@@ -7,12 +7,14 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -39,6 +41,9 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -418,22 +423,37 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onPostExecute(final String response) {
             mAuthTask = null;
             progressDialog.dismiss();
-            if (!response.isEmpty() && response.equals("Success")) {
-                Intent I = new Intent(mContext, HomeActivity.class);
-                startActivity(I);
-            } else if (!response.isEmpty() && response.equals("Email Error")) {
-                mEmailView.setError("Email does not exist");
-                mEmailView.requestFocus();
-            } else if (!response.isEmpty() && response.equals("Password Error")) {
-                mPasswordView.setError("Email/Password do not match");
-                mPasswordView.requestFocus();
-            } else {
-                CharSequence text = "Something went wrong!";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(mContext, text, duration);
-                toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
-                toast.show();
+            String result = new String();
+            try {
+                JSONObject responseJson = new JSONObject(response);
+                result = responseJson.getString("result");
+                if (!result.isEmpty() && result.equals("Success")) {
+                    String name = responseJson.getString("name");
+                    String email = responseJson.getString("email");
+                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(getString(R.string.user_name), name);
+                    editor.putString(getString(R.string.user_email), email);
+                    editor.commit();
+                    Intent I = new Intent(mContext, HomeActivity.class);
+                    startActivity(I);
+                } else if (!result.isEmpty() && result.equals("Email Error")) {
+                    mEmailView.setError("Email does not exist");
+                    mEmailView.requestFocus();
+                } else if (!result.isEmpty() && result.equals("Password Error")) {
+                    mPasswordView.setError("Email/Password do not match");
+                    mPasswordView.requestFocus();
+                } else {
+                    CharSequence text = "Something went wrong!";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(mContext, text, duration);
+                    toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+
         }
 
         @Override
