@@ -2,7 +2,6 @@ package edu.uci.collabevent;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,15 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -31,7 +24,6 @@ public class EventListActivity extends AppCompatActivity {
     private ArrayList<Event> events;
     private ProgressDialog progressDialog = null;
     private EventsListTask listFetchTask;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +81,6 @@ public class EventListActivity extends AppCompatActivity {
 
                 //print result
                 Log.d("DEBUG", response.toString());
-
 
             } catch (IOException e) {
                 e.printStackTrace();

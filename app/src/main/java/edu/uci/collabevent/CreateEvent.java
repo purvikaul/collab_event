@@ -70,7 +70,6 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
     StringBuilder inviteListString;
     CharSequence[] dialogList;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +88,6 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
         inviteListString = new StringBuilder();
         context = getApplicationContext();
         eventImage = new String();
-
 
         bImage = (Button) findViewById(R.id.img_upload);
         bCreate = (Button) findViewById(R.id.btn_create);
@@ -144,10 +142,8 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
         eventDate = mDate.getText().toString();
         eventDesc = mDescription.getText().toString();
 
-
         boolean cancel = false;
         View focusView = null;
-
 
         if (TextUtils.isEmpty(eventName)) {
             mEventName.setError(getString(R.string.error_field_required));
@@ -176,7 +172,6 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
 
         }
 
-
     }
 
     public String postCreateEventData() throws IOException, JSONException {
@@ -196,7 +191,6 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
         eventData.put("event_desc", eventDesc);
         eventData.put("event_invitees", invitees);
         eventData.put("event_pic", eventImage);
-
 
         OutputStream os = connection.getOutputStream();
         os.write(eventData.toString().getBytes("UTF-8"));
@@ -223,7 +217,6 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
         return response.toString();
 
     }
-
 
     public void createUserListDialog() {
 
@@ -310,7 +303,6 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
 
-
             DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                     new DatePickerDialog.OnDateSetListener() {
 
@@ -344,7 +336,6 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
                     }, mHour, mMinute, false);
             timePickerDialog.show();
         }
-
 
     }
 
@@ -406,7 +397,6 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
                 //print result
                 Log.d("DEBUG", response.toString());
 
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -437,12 +427,10 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
                 e.printStackTrace();
             }
 
-
         }
     }
 
     protected class CreateActivityTask extends AsyncTask<Void, Void, String> {
-
 
         @Override
         protected String doInBackground(Void... params) {

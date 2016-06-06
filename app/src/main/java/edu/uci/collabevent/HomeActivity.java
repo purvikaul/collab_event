@@ -70,7 +70,6 @@ public class HomeActivity extends AppCompatActivity {
         mUserLearnedDrawer = Boolean.valueOf(readSharedSetting(getApplicationContext(), PREF_USER_LEARNED_DRAWER, "false"));
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         setUpNavDrawer();
 
@@ -94,12 +93,9 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
-
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
-        ;
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -134,11 +130,7 @@ public class HomeActivity extends AppCompatActivity {
         mName.setText(name);
         mEmail = (TextView) header.findViewById(R.id.email);
         mEmail.setText(email);
-
-
     }
-
-
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -147,7 +139,6 @@ public class HomeActivity extends AppCompatActivity {
         adapter.addFragment(new InvitationListFragment(), "Invitations");
         viewPager.setAdapter(adapter);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -167,7 +158,6 @@ public class HomeActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -195,7 +185,6 @@ public class HomeActivity extends AppCompatActivity {
             mFragmentTitleList.add(title);
         }
 
-
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
@@ -215,7 +204,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     protected class SignOutTask extends AsyncTask<Void, Void, String> {
-
 
         private String postSignOut() throws IOException {
             URL url = new URL(getApplicationContext().getString(R.string.server_ip) + getApplicationContext().getString(R.string.signout_url));

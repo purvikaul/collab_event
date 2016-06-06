@@ -158,7 +158,6 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         }
     }
 
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -276,7 +275,6 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         mEmailView.setAdapter(adapter);
     }
 
-
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -346,7 +344,6 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         private final String mEmail;
         private final String mPassword;
         private final String mName;
-
 
         UserSignupTask(String name, String email, String password, Context context) {
             mEmail = email;

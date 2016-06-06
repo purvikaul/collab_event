@@ -86,7 +86,6 @@ public class Task {
                 tasksList.add(task);
             }
 
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

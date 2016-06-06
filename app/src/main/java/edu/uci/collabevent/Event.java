@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 public class Event {
     public static SimpleDateFormat parseDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
     public static SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE, d MMM HH:mm");
@@ -24,7 +23,6 @@ public class Event {
     private URL imgURL;
     private Integer membersCount;
     private Integer invitedCount;
-
 
     public Event(String name) {
         this.name = name;
@@ -112,7 +110,6 @@ public class Event {
                 Event event = new Event(eventName, eventDate, eventVenue, eventImgUrl, eventMembersCount, eventInvitedCount);
                 eventsList.add(event);
             }
-
 
         } catch (JSONException e) {
             e.printStackTrace();

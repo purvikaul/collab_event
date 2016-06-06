@@ -37,7 +37,6 @@ public class EventListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
     }
 
     @Override
@@ -82,7 +81,7 @@ public class EventListFragment extends Fragment {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading....");
         if (showProgess) {
-        progressDialog.show();
+            progressDialog.show();
         }
 
     }
@@ -120,7 +119,6 @@ public class EventListFragment extends Fragment {
 
                 //print result
                 Log.d("DEBUG", response.toString());
-
 
             } catch (IOException e) {
                 e.printStackTrace();

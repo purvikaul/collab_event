@@ -106,7 +106,6 @@ public class TaskListFragment extends Fragment {
                 //print result
                 Log.d("DEBUG", response.toString());
 
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

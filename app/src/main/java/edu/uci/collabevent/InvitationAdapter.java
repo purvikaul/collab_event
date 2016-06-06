@@ -69,9 +69,7 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
             }
         });
 
-
     }
-
 
     @Override
     public int getItemCount() {
@@ -108,7 +106,6 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
             this.position = p;
         }
 
-
         @Override
         protected String doInBackground(String... ids) {
             StringBuffer response = new StringBuffer();
@@ -143,7 +140,6 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
                 //print result
                 Log.d("DEBUG", response.toString());
 
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -168,7 +164,6 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
         RejectTask(int p) {
             this.position = p;
         }
-
 
         @Override
         protected String doInBackground(String... ids) {
@@ -203,7 +198,6 @@ public class InvitationAdapter extends RecyclerView.Adapter<InvitationAdapter.Vi
 
                 //print result
                 Log.d("DEBUG", response.toString());
-
 
             } catch (IOException e) {
                 e.printStackTrace();

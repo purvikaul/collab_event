@@ -6,7 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ public class Invitation {
     private Integer invitedCount;
     private Integer id;
 
-
     public Invitation(String name) {
         this.name = name;
     }
@@ -44,7 +42,6 @@ public class Invitation {
         this.id = id;
 
     }
-
 
     public Invitation(String name, String date, String venue, Integer id) {
         this.name = name;
@@ -97,7 +94,6 @@ public class Invitation {
                 Invitation invitation = new Invitation(inviteName, inviteDate, inviteVenue, inviteMembersCount, inviteInvitedCount, inviteId);
                 invitations.add(invitation);
             }
-
 
         } catch (JSONException e) {
             e.printStackTrace();

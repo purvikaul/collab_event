@@ -176,7 +176,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
-
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -220,7 +219,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -230,8 +228,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (mAuthTask != null) {
             return;
         }
-
-
 
         // Reset errors.
         mEmailView.setError(null);
@@ -331,7 +327,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView.setAdapter(adapter);
     }
 
-
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -341,7 +336,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
-
 
     private String postSignupData(String email, String password, Context context) throws IOException {
 
@@ -404,7 +398,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mPassword = password;
             mContext = context;
         }
-
 
         @Override
         protected String doInBackground(Void... params) {
