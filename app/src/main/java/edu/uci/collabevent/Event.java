@@ -18,6 +18,8 @@ import java.util.Date;
 public class Event implements Parcelable {
     public static SimpleDateFormat parseDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
     public static SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE, d MMM HH:mm");
+    public static SimpleDateFormat onlyDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static SimpleDateFormat onlyTimeFormat = new SimpleDateFormat("HH:mm");
 
     private String name;
     private Date date;

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AboutEventFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -20,7 +21,8 @@
             <ImageView
                 android:id="@+id/event_img"
                 android:layout_width="150dp"
-                android:layout_height="150dp" />
+                android:layout_height="150dp"
+                android:transitionName="Image" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -37,7 +39,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:maxLines="1"
+                    android:maxLines="2"
+                    android:transitionName="EventName"
                     android:text="Event Name"
                     android:textSize="25dp"
                     android:textStyle="bold" />
@@ -48,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:textSize="16dp"
-                    android:text="Created By" />
+                    android:text="Created by:" />
 
             </LinearLayout>
         </LinearLayout>
@@ -116,5 +119,16 @@
                 android:text="Description.." />
         </LinearLayout>
     </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_mode_edit_white_18dp"
+        app:backgroundTint="@color/floating_button_color" />
 
 </FrameLayout>
