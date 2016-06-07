@@ -12,9 +12,9 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by user on 30-05-2016.
+ * Created by Prateek on 07/06/16.
  */
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
+public class TaskEventAdapter extends RecyclerView.Adapter<TaskEventAdapter.ViewHolder> {
 
     private List<Task> mTasks;
 
@@ -23,14 +23,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View taskView = inflater.inflate(R.layout.task_card, parent, false);
+        View taskView = inflater.inflate(R.layout.task_event_card, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(taskView);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(TaskAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(TaskEventAdapter.ViewHolder viewHolder, int position) {
         Task task = mTasks.get(position);
 
         TextView titleView = viewHolder.taskTitle;
@@ -66,14 +66,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             taskTitle = (TextView) itemView.findViewById(R.id.task_name);
-            eventName = (TextView) itemView.findViewById(R.id.event_name);
+            eventName = (TextView) itemView.findViewById(R.id.task_assignment);
             dueDate = (TextView) itemView.findViewById(R.id.due_date);
             statusImage = (ImageView) itemView.findViewById(R.id.status);
         }
 
     }
 
-    public TaskAdapter(List<Task> mTasks) {
+    public TaskEventAdapter(List<Task> mTasks) {
         this.mTasks = mTasks;
     }
 
