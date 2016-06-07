@@ -63,6 +63,10 @@
             android:name=".CreateEvent"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Form"></activity>
+        <activity
+            android:name=".EditEventActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Form"></activity>
     </application>
 
 </manifest>
