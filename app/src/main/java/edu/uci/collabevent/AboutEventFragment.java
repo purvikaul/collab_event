@@ -1,18 +1,17 @@
 package edu.uci.collabevent;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AboutEventFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the  factory method to
  * create an instance of this fragment.
@@ -23,8 +22,10 @@ public class AboutEventFragment extends Fragment {
     private TextView mEventVenue;
     private TextView mEventTime;
     private TextView mEventDesc;
+    private TextView mEventCreator;
+    private ImageView mEventImage;
 
-    private OnFragmentInteractionListener mListener;
+//    private OnFragmentInteractionListener mListener;
 
     public AboutEventFragment() {
         // Required empty public constructor
@@ -61,11 +62,13 @@ public class AboutEventFragment extends Fragment {
         mEventVenue = (TextView) view.findViewById(R.id.event_venue);
         mEventTime = (TextView) view.findViewById(R.id.event_time);
         mEventDesc = (TextView) view.findViewById(R.id.event_desc);
+        mEventCreator = (TextView) view.findViewById(R.id.event_creator);
+        mEventImage = (ImageView) view.findViewById(R.id.event_img);
+
 
         setEventDetails();
 
         return view;
-
     }
 
     public void setEventDetails() {
@@ -82,32 +85,40 @@ public class AboutEventFragment extends Fragment {
         mEventVenue.setText(event.getVenue());
         mEventTime.setText(Event.displayDateFormat.format(event.getDate()));
         mEventDesc.setText(event.getDescription());
+        mEventCreator.setText(event.getEventCreator());
 
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        String imgUrl = event.getImgURL().toString();
+        if (!imgUrl.endsWith("null")) {
+            DownloadImageTask downloadImageTask = new DownloadImageTask(mEventImage);
+            Log.d("DEBUG-IMG", imgUrl);
+            downloadImageTask.execute(imgUrl);
         }
-    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+//
+//    // TODO: Rename method, update argument and hook method into UI event
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {
+//            mListener.onFragmentInteraction(uri);
+//        }
+//    }
+//
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
+//    }
+//
+//    @Override
+//    public void onDetach() {
+//        super.onDetach();
+//        mListener = null;
+//    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -119,8 +130,8 @@ public class AboutEventFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+//    public interface OnFragmentInteractionListener {
+//        // TODO: Update argument type and name
+//        void onFragmentInteraction(Uri uri);
+//    }
 }
