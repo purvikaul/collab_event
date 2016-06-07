@@ -22,16 +22,18 @@ public class Event implements Parcelable {
     private String name;
     private Date date;
     private String venue;
+    private String description;
     private URL imgURL;
     private Integer membersCount;
     private Integer invitedCount;
     private Integer eventId;
+    private String eventCreator;
 
     public Event(String name) {
         this.name = name;
     }
 
-    public Event(String name, String date, String venue, String imgURL, Integer membersCount, Integer invitedCount, Integer eventId) {
+    public Event(String name, String date, String venue, String imgURL, Integer membersCount, Integer invitedCount, Integer eventId, String description, String createdBy) {
         this.name = name;
         this.venue = venue;
         this.eventId = eventId;
@@ -48,37 +50,40 @@ public class Event implements Parcelable {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        this.description = description;
         this.membersCount = membersCount;
         this.invitedCount = invitedCount;
+        this.eventCreator = createdBy;
+
 
     }
 
-    public Event(String name, String date, String venue, Integer membersCount, Integer invitedCount) {
-        this.name = name;
-        this.venue = venue;
-        this.membersCount = membersCount;
-        this.invitedCount = invitedCount;
-
-    }
-
-    public Event(String name, String date, String venue) {
-        this.name = name;
-        try {
-            this.date = parseDateFormat.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        this.venue = venue;
-    }
-
-    public Event(String name, String date) {
-        this.name = name;
-        try {
-            this.date = parseDateFormat.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
+//    public Event(String name, String date, String venue, Integer membersCount, Integer invitedCount) {
+//        this.name = name;
+//        this.venue = venue;
+//        this.membersCount = membersCount;
+//        this.invitedCount = invitedCount;
+//
+//    }
+//
+//    public Event(String name, String date, String venue) {
+//        this.name = name;
+//        try {
+//            this.date = parseDateFormat.parse(date);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        this.venue = venue;
+//    }
+//
+//    public Event(String name, String date) {
+//        this.name = name;
+//        try {
+//            this.date = parseDateFormat.parse(date);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public String getName() {
         return name;
@@ -96,6 +101,14 @@ public class Event implements Parcelable {
         return imgURL;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public String getEventCreator() {
+        return eventCreator;
+    }
+
     public static ArrayList<Event> createEventsFromJSON(String EventsJSON) {
         ArrayList<Event> eventsList = new ArrayList<Event>();
         Log.d("DEBUG-JSON", EventsJSON);
@@ -107,12 +120,14 @@ public class Event implements Parcelable {
                 String eventName = jsonEvent.getString("name");
                 String eventDate = jsonEvent.getString("time");
                 String eventVenue = jsonEvent.getString("venue");
+                String eventDesc = jsonEvent.getString("desc");
                 Integer eventMembersCount = jsonEvent.getInt("members_count");
                 Integer eventInvitedCount = jsonEvent.getInt("invited_count");
                 Integer eventId = jsonEvent.getInt("id");
                 String eventImgUrl = jsonEvent.getString("picture");
+                String eventCreator = jsonEvent.getString("created_by");
 
-                Event event = new Event(eventName, eventDate, eventVenue, eventImgUrl, eventMembersCount, eventInvitedCount, eventId);
+                Event event = new Event(eventName, eventDate, eventVenue, eventImgUrl, eventMembersCount, eventInvitedCount, eventId, eventDesc, eventCreator);
                 eventsList.add(event);
             }
 

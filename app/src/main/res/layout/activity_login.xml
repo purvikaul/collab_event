@@ -102,7 +102,6 @@
             android:text="No account yet? Sign Up"
             android:textSize="16dp" />
 
-
     </LinearLayout>
 </ScrollView>
 
