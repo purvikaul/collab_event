@@ -40,7 +40,7 @@ public class EventDetailActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
-    private Integer eventId;
+    private Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class EventDetailActivity extends AppCompatActivity {
         Bundle extrasBundle = intentExtras.getExtras();
 
         if (!extrasBundle.isEmpty()) {
-            eventId = extrasBundle.getInt("eventId");
+            event = extrasBundle.getParcelable("event");
         } else {
             Log.d("DEBUG_EV_DETAIL", "Event Detail Activity initialised without id.");
             Log.d("DEBUG_EV_DETAIL", "Going to Splash screen.");
@@ -62,7 +62,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(Integer.toString(eventId));
+        getSupportActionBar().setTitle(event.getName());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);

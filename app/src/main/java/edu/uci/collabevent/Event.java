@@ -1,5 +1,7 @@
 package edu.uci.collabevent;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -13,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Event {
+public class Event implements Parcelable {
     public static SimpleDateFormat parseDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
     public static SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE, d MMM HH:mm");
 
@@ -132,5 +134,44 @@ public class Event {
     public Integer getEventId() {
         return eventId;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeLong(this.date != null ? this.date.getTime() : -1);
+        dest.writeString(this.venue);
+        dest.writeSerializable(this.imgURL);
+        dest.writeValue(this.membersCount);
+        dest.writeValue(this.invitedCount);
+        dest.writeValue(this.eventId);
+    }
+
+    protected Event(Parcel in) {
+        this.name = in.readString();
+        long tmpDate = in.readLong();
+        this.date = tmpDate == -1 ? null : new Date(tmpDate);
+        this.venue = in.readString();
+        this.imgURL = (URL) in.readSerializable();
+        this.membersCount = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.invitedCount = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.eventId = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel source) {
+            return new Event(source);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
 }
 

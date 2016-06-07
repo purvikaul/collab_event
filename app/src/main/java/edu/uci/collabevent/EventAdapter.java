@@ -53,7 +53,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             downloadImageTask.execute(imgUrl);
         }
 
-        viewHolder.eventId = event.getEventId();
+        viewHolder.event = event;
 
     }
 
@@ -68,7 +68,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         public TextView eventVenue;
         public TextView eventDate;
         public ImageView eventImage;
-        public Integer eventId;
+        public Event event;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -85,7 +85,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     // Pass event id to the Detail activity
                     Intent intent = new Intent(context, EventDetailActivity.class);
                     Bundle informationBundle = new Bundle();
-                    informationBundle.putInt("eventId", eventId);
+                    informationBundle.putParcelable("event", event);
                     intent.putExtras(informationBundle);
                     context.startActivity(intent);
                 }
