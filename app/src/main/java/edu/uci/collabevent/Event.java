@@ -23,14 +23,16 @@ public class Event {
     private URL imgURL;
     private Integer membersCount;
     private Integer invitedCount;
+    private Integer eventId;
 
     public Event(String name) {
         this.name = name;
     }
 
-    public Event(String name, String date, String venue, String imgURL, Integer membersCount, Integer invitedCount) {
+    public Event(String name, String date, String venue, String imgURL, Integer membersCount, Integer invitedCount, Integer eventId) {
         this.name = name;
         this.venue = venue;
+        this.eventId = eventId;
         try {
             this.date = parseDateFormat.parse(date);
         } catch (ParseException e) {
@@ -105,9 +107,10 @@ public class Event {
                 String eventVenue = jsonEvent.getString("venue");
                 Integer eventMembersCount = jsonEvent.getInt("members_count");
                 Integer eventInvitedCount = jsonEvent.getInt("invited_count");
+                Integer eventId = jsonEvent.getInt("id");
                 String eventImgUrl = jsonEvent.getString("picture");
 
-                Event event = new Event(eventName, eventDate, eventVenue, eventImgUrl, eventMembersCount, eventInvitedCount);
+                Event event = new Event(eventName, eventDate, eventVenue, eventImgUrl, eventMembersCount, eventInvitedCount, eventId);
                 eventsList.add(event);
             }
 
@@ -124,6 +127,10 @@ public class Event {
 
     public Integer getInvitedCount() {
         return invitedCount;
+    }
+
+    public Integer getEventId() {
+        return eventId;
     }
 }
 

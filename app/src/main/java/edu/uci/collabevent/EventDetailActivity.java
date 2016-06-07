@@ -1,9 +1,7 @@
 package edu.uci.collabevent;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -17,23 +15,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
-
+/**
+ * Created by Prateek on 06/06/16.
+ */
+public class EventDetailActivity extends AppCompatActivity {
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -45,19 +39,30 @@ public class HomeActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
-    NavigationView mNavigationView;
-
-
+    private NavigationView mNavigationView;
+    private Integer eventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+
+        Intent intentExtras = getIntent();
+        Bundle extrasBundle = intentExtras.getExtras();
+
+        if (!extrasBundle.isEmpty()) {
+            eventId = extrasBundle.getInt("eventId");
+        } else {
+            Log.d("DEBUG_EV_DETAIL", "Event Detail Activity initialised without id.");
+            Log.d("DEBUG_EV_DETAIL", "Going to Splash screen.");
+            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+            startActivity(intent);
+        }
+
+        setContentView(R.layout.activity_event_detail);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Collab Event");
-        getSupportActionBar().setIcon(R.drawable.logo);
+        getSupportActionBar().setTitle(Integer.toString(eventId));
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -77,9 +82,9 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new EventListFragment(), "Events");
-        adapter.addFragment(new TaskListFragment(), "Tasks");
-        adapter.addFragment(new InvitationListFragment(), "Invitations");
+//        adapter.addFragment(new EventListFragment(), "Events");
+//        adapter.addFragment(new TaskListFragment(), "Tasks");
+//        adapter.addFragment(new InvitationListFragment(), "Invitations");
         viewPager.setAdapter(adapter);
     }
 
@@ -133,6 +138,5 @@ public class HomeActivity extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
+
 }
-
-

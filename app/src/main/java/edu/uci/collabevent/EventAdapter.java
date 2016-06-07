@@ -1,6 +1,8 @@
 package edu.uci.collabevent;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,10 +19,11 @@ import java.util.List;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
 
     private List<Event> mEvents;
+    private Context context;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View eventView = inflater.inflate(R.layout.event_card, parent, false);
@@ -50,6 +53,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             downloadImageTask.execute(imgUrl);
         }
 
+        viewHolder.eventId = event.getEventId();
+
     }
 
     @Override
@@ -57,12 +62,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         return mEvents.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView eventName;
         public TextView eventVenue;
         public TextView eventDate;
         public ImageView eventImage;
+        public Integer eventId;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -70,6 +76,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             eventVenue = (TextView) itemView.findViewById(R.id.event_venue);
             eventDate = (TextView) itemView.findViewById(R.id.event_date);
             eventImage = (ImageView) itemView.findViewById(R.id.event_image);
+
+            // Add onClick listener to the event card
+            itemView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    // Pass event id to the Detail activity
+                    Intent intent = new Intent(context, EventDetailActivity.class);
+                    Bundle informationBundle = new Bundle();
+                    informationBundle.putInt("eventId", eventId);
+                    intent.putExtras(informationBundle);
+                    context.startActivity(intent);
+                }
+            });
         }
 
     }

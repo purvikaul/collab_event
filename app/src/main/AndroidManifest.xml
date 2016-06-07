@@ -56,6 +56,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".EventDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".CreateEvent"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Form"></activity>

@@ -309,8 +309,21 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
+                            StringBuilder dateText = new StringBuilder();
 
-                            mDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            dateText.append(Integer.toString(year) + "-");
+
+                            if (monthOfYear < 9) {
+                                dateText.append("0");
+                            }
+                            dateText.append(Integer.toString(monthOfYear + 1) + "-");
+
+                            if (dayOfMonth < 10) {
+                                dateText.append("0");
+                            }
+
+                            dateText.append(Integer.toString(dayOfMonth));
+                            mDate.setText(dateText.toString());
 
                         }
                     }, mYear, mMonth, mDay);
@@ -331,7 +344,19 @@ public class CreateEvent extends AppCompatActivity implements View.OnClickListen
                         public void onTimeSet(TimePicker view, int hourOfDay,
                                               int minute) {
 
-                            mTime.setText(hourOfDay + ":" + minute);
+                            StringBuilder timeText = new StringBuilder();
+
+                            if (hourOfDay < 10) {
+                                timeText.append("0");
+                            }
+                            timeText.append(hourOfDay + ":");
+
+                            if (minute < 10) {
+                                timeText.append("0");
+                            }
+                            timeText.append(minute);
+
+                            mTime.setText(timeText.toString());
                         }
                     }, mHour, mMinute, false);
             timePickerDialog.show();
