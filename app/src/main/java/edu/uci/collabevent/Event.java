@@ -16,10 +16,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Event implements Parcelable {
-    public static SimpleDateFormat parseDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
+    public static SimpleDateFormat parseDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE, d MMM HH:mm");
     public static SimpleDateFormat onlyDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     public static SimpleDateFormat onlyTimeFormat = new SimpleDateFormat("HH:mm");
+
 
     private String name;
     private Date date;
@@ -111,6 +112,42 @@ public class Event implements Parcelable {
         return eventCreator;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setVenue(String venue) {
+        this.venue = venue;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setImgURL(URL imgURL) {
+        this.imgURL = imgURL;
+    }
+
+    public void setMembersCount(Integer membersCount) {
+        this.membersCount = membersCount;
+    }
+
+    public void setInvitedCount(Integer invitedCount) {
+        this.invitedCount = invitedCount;
+    }
+
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
+    }
+
+    public void setEventCreator(String eventCreator) {
+        this.eventCreator = eventCreator;
+    }
+
     public static ArrayList<Event> createEventsFromJSON(String EventsJSON) {
         ArrayList<Event> eventsList = new ArrayList<Event>();
         Log.d("DEBUG-JSON", EventsJSON);
@@ -119,17 +156,7 @@ public class Event implements Parcelable {
 
             for (int i = 0; i < reader.length(); i++) {
                 JSONObject jsonEvent = reader.getJSONObject(i);
-                String eventName = jsonEvent.getString("name");
-                String eventDate = jsonEvent.getString("time");
-                String eventVenue = jsonEvent.getString("venue");
-                String eventDesc = jsonEvent.getString("desc");
-                Integer eventMembersCount = jsonEvent.getInt("members_count");
-                Integer eventInvitedCount = jsonEvent.getInt("invited_count");
-                Integer eventId = jsonEvent.getInt("id");
-                String eventImgUrl = jsonEvent.getString("picture");
-                String eventCreator = jsonEvent.getString("created_by");
-
-                Event event = new Event(eventName, eventDate, eventVenue, eventImgUrl, eventMembersCount, eventInvitedCount, eventId, eventDesc, eventCreator);
+                Event event = createEvenFromJSON(jsonEvent);
                 eventsList.add(event);
             }
 
@@ -190,5 +217,21 @@ public class Event implements Parcelable {
             return new Event[size];
         }
     };
+
+    public static Event
+    createEvenFromJSON(JSONObject jsonEvent) throws JSONException {
+        String eventName = jsonEvent.getString("name");
+        String eventDate = jsonEvent.getString("time");
+        String eventVenue = jsonEvent.getString("venue");
+        String eventDesc = jsonEvent.getString("desc");
+        Integer eventMembersCount = jsonEvent.getInt("members_count");
+        Integer eventInvitedCount = jsonEvent.getInt("invited_count");
+        Integer eventId = jsonEvent.getInt("id");
+        String eventImgUrl = jsonEvent.getString("picture");
+        String eventCreator = jsonEvent.getString("created_by");
+
+        Event event = new Event(eventName, eventDate, eventVenue, eventImgUrl, eventMembersCount, eventInvitedCount, eventId, eventDesc, eventCreator);
+        return event;
+    }
 }
 

@@ -62,11 +62,12 @@
         <activity
             android:name=".CreateEvent"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Form"></activity>
+            android:theme="@style/AppTheme.Form" />
         <activity
             android:name=".EditEventActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Form"></activity>
+            android:theme="@style/AppTheme.Form" />
+        <activity android:name=".UserProfile"></activity>
     </application>
 
 </manifest>

@@ -34,7 +34,7 @@ public class EventDetailActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
-    private Event event;
+    public static Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

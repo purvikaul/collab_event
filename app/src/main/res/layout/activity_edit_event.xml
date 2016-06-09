@@ -105,7 +105,10 @@
                 android:layout_marginRight="10dp"
                 android:transitionName="Image"
                 android:paddingRight="10dp"
-                android:src="@drawable/round_button" />
+                android:src="@drawable/round_button"
+                android:contentDescription="Select an Image">
+
+            </ImageView>
 
             <Button
                 android:id="@+id/img_upload"
@@ -139,27 +142,27 @@
                 android:inputType="textCapSentences|textImeMultiLine" />
         </android.support.design.widget.TextInputLayout>
 
-        <RelativeLayout
-            android:id="@+id/openDialog"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            android:background="@color/primary">
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/openDialog"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:background="@color/primary">-->
 
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#555555"
-                android:singleLine="true"
-                android:textSize="18dp"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:text="Invite" />
+        <!--<TextView-->
+        <!--android:id="@+id/text"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="#555555"-->
+        <!--android:singleLine="true"-->
+        <!--android:textSize="18dp"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:text="Invite" />-->
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
         <Button
             android:id="@+id/btn_create"

@@ -88,11 +88,14 @@ public class AboutEventFragment extends Fragment {
                 Log.d("BITMAP", "Crossed1");
                 Intent intent = new Intent(mContext, EditEventActivity.class);
                 Log.d("BITMAP", "Crossed2");
+                byte[] b = new byte[0];
                 Bitmap image = ((BitmapDrawable) mEventImage.getDrawable()).getBitmap();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                image.compress(Bitmap.CompressFormat.JPEG, 50, baos); //bm is the bitmap object
-                byte[] b = baos.toByteArray();
-                Log.d("BITMAP", "Crossed3");
+                if (image != null) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    image.compress(Bitmap.CompressFormat.JPEG, 50, baos); //bm is the bitmap object
+                    b = baos.toByteArray();
+                    Log.d("BITMAP", "Crossed3");
+                }
                 Bundle informationBundle = new Bundle();
                 informationBundle.putParcelable("event", event);
                 intent.putExtra("image", b);
@@ -100,7 +103,7 @@ public class AboutEventFragment extends Fragment {
                 intent.putExtras(informationBundle);
                 Log.d("BITMAP", "Crossed5");
                 mContext.startActivity(intent);
-                startActivity(intent);
+
 
             }
         });
@@ -120,7 +123,7 @@ public class AboutEventFragment extends Fragment {
         mEventVenue.setText(event.getVenue());
         mEventTime.setText(Event.displayDateFormat.format(event.getDate()));
         mEventDesc.setText(event.getDescription());
-        mEventCreator.setText(mEventCreator.getText() + event.getEventCreator());
+        mEventCreator.setText("Created by: " + event.getEventCreator());
 
         String imgUrl = event.getImgURL().toString();
         if (!imgUrl.endsWith("null")) {
@@ -130,7 +133,15 @@ public class AboutEventFragment extends Fragment {
         }
 
     }
-//
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        event = parentActivity.getEvent();
+        setEventDetails();
+    }
+
+    //
 //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
 //        if (mListener != null) {

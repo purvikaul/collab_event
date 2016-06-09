@@ -1,11 +1,9 @@
 package edu.uci.collabevent;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +11,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -24,12 +21,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,15 +34,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class EditEventActivity extends AppCompatActivity implements View.OnClickListener {
 
     ProgressDialog progressDialog = null;
 
-    private CreateActivityTask mCreate = null;
+    private EditActivityTask mEdit = null;
 
     private EditText mEventName;
     private EditText mVenue;
@@ -58,20 +50,13 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
     private ImageView imageView;
     private Button bImage;
     private int PICK_IMAGE_REQUEST = 1;
-    private List<String> userList;
-    private List<String> emailList;
-    private View openDialog;
-    private boolean[] isChecked;
     private Button bCreate;
-    private AlertDialog alert;
     private String eventName, eventVenue, eventTime, eventDate, eventDesc, eventImage;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private Context context;
-    private JSONArray invitees;
-    StringBuilder inviteListString;
-    CharSequence[] dialogList;
     private Event event;
     private Bitmap image;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,12 +77,7 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
             startActivity(intent);
         }
 
-        userList = new ArrayList<>();
-        emailList = new ArrayList<>();
-        invitees = new JSONArray();
-//
-//        eventText = (TextView) findViewById(R.id.event_nametext);
-//        eventText.setText(event.getName());
+
 
         mEventName = (EditText) findViewById(R.id.event_name);
         mEventName.setText(event.getName());
@@ -111,10 +91,10 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
         mTime = (EditText) findViewById(R.id.in_time);
         mTime.setText(Event.onlyTimeFormat.format(event.getDate()));
         imageView = (ImageView) findViewById(R.id.event_img);
-        imageView.setImageBitmap(image);
+        if (image != null) {
+            imageView.setImageBitmap(image);
+        }
 
-        openDialog = (View) findViewById(R.id.openDialog);
-        inviteListString = new StringBuilder();
         context = getApplicationContext();
         eventImage = new String();
 
@@ -140,25 +120,14 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
         bCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attemptCreate();
+                attemptEdit();
             }
         });
 
-//        InviteListTask inviteListTask = new InviteListTask();
-//        inviteListTask.execute();
-
-//        openDialog.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                createUserListDialog();
-//                alert.show();
-//            }
-//        });
     }
 
-    public void attemptCreate() {
-        if (mCreate != null) {
+    public void attemptEdit() {
+        if (mEdit != null) {
             return;
         }
 
@@ -196,15 +165,15 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Creating Event....");
             progressDialog.show();
-            mCreate = new CreateActivityTask();
-            mCreate.execute((Void) null);
+            mEdit = new EditActivityTask();
+            mEdit.execute((Void) null);
 
         }
 
     }
 
-    public String postCreateEventData() throws IOException, JSONException {
-        URL url = new URL(context.getString(R.string.server_ip) + context.getString(R.string.create_event_url));
+    public String postEditEventData() throws IOException, JSONException {
+        URL url = new URL(context.getString(R.string.server_ip) + context.getString(R.string.edit_event_url));
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
         connection.setReadTimeout(10000);
@@ -214,11 +183,11 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
         connection.setDoOutput(true);
 
         JSONObject eventData = new JSONObject();
+        eventData.put("event_id", event.getEventId());
         eventData.put("event_name", eventName);
         eventData.put("event_venue", eventVenue);
         eventData.put("event_time", eventDate + " " + eventTime + ":00");
         eventData.put("event_desc", eventDesc);
-        eventData.put("event_invitees", invitees);
         eventData.put("event_pic", eventImage);
 
         OutputStream os = connection.getOutputStream();
@@ -244,81 +213,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
         Log.d("DEBUG", response.toString());
 
         return response.toString();
-
-    }
-
-    public void createUserListDialog() {
-
-        dialogList = userList.toArray(new CharSequence[userList.size()]);
-
-        final boolean[] isSelected = new boolean[isChecked.length];
-        for (int i = 0; i < isChecked.length; i++) {
-            isSelected[i] = Boolean.valueOf(isChecked[i]);
-        }
-
-        Log.d("DEBUG_CLICK2", "In inviteList()");
-        // Intialize  readable sequence of char values
-
-        final AlertDialog.Builder builderDialog = new AlertDialog.Builder(EditEventActivity.this);
-        builderDialog.setTitle("Select Item");
-
-        // Creating multiple selection by using setMutliChoiceItem method
-        builderDialog.setMultiChoiceItems(dialogList, isSelected,
-                new DialogInterface.OnMultiChoiceClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton, boolean isChecked) {
-                    }
-                });
-
-        alert = builderDialog.create();
-        alert.setButton(Dialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Log.d("DEBUG_CREATE", "OK Clicked!");
-                inviteListString = new StringBuilder();
-                invitees = new JSONArray();
-                ListView list = ((AlertDialog) dialog).getListView();
-                // make selected item in the comma seperated string
-                for (int i = 0; i < list.getCount(); i++) {
-                    boolean checked = list.isItemChecked(i);
-                    isChecked[i] = checked;
-                    Log.d("LLIS", "DONE2");
-
-                    if (checked) {
-                        if (inviteListString.length() > 0) inviteListString.append(",");
-                        inviteListString.append(list.getItemAtPosition(i));
-                        invitees.put(emailList.get(i));
-                    }
-                }
-
-                if (inviteListString.toString().trim().equals("")) {
-
-                    ((TextView) findViewById(R.id.text)).setText("Click here to open Dialog");
-                    inviteListString.setLength(0);
-
-                } else {
-
-                    ((TextView) findViewById(R.id.text)).setText(inviteListString);
-                }
-            }
-
-        });
-
-        alert.setButton(Dialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                ListView list = ((AlertDialog) dialog).getListView();
-                // make selected item in the comma seperated string
-                for (int i = 0; i < list.getCount(); i++) {
-                    Log.d("LLIS", "WORk");
-                    list.setItemChecked(i, isChecked[i]);
-                }
-
-                Log.d("DEBUG_CREATE", "Cancel Clicked!");
-            }
-
-        });
 
     }
 
@@ -408,6 +302,7 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos); //bm is the bitmap object
                 byte[] b = baos.toByteArray();
+
                 eventImage = Base64.encodeToString(b, Base64.DEFAULT);
 
                 imageView.setImageBitmap(bitmap);
@@ -417,81 +312,14 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    protected class InviteListTask extends AsyncTask<Void, Void, String> {
-        Context mContext;
-
-        InviteListTask() {
-            this.mContext = getApplicationContext();
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            StringBuffer response = new StringBuffer("");
-            try {
-                URL eventsListURL = new URL(mContext.getString(R.string.server_ip) + mContext.getString(R.string.friend_list));
-                HttpURLConnection connection = (HttpURLConnection) eventsListURL.openConnection();
-                connection.setReadTimeout(10000);
-                connection.setConnectTimeout(15000);
-                connection.setRequestMethod("GET");
-
-                int responseCode = connection.getResponseCode();
-                Log.d("DEBUG", "\nSending 'GET' request to URL : " + eventsListURL);
-                Log.d("DEBUG", "Response Code : " + responseCode);
-
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream()));
-                String inputLine;
-                response = new StringBuffer();
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-
-                //print result
-                Log.d("DEBUG", response.toString());
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return response.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            createFriendsFromJSON(s);
-        }
-
-        public void createFriendsFromJSON(String friendList) {
-            Log.d("DEBUG_LIST", "In createFriendsFromJSON()");
-
-            try {
-                JSONArray reader = new JSONArray(friendList);
-                isChecked = new boolean[friendList.length()];
-                for (int i = 0; i < friendList.length(); i++) {
-                    JSONObject jsonObject = reader.getJSONObject(i);
-                    String friendName = jsonObject.getString("name");
-                    String friendEmail = jsonObject.getString("email");
-                    userList.add(friendName);
-                    emailList.add(friendEmail);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-    protected class CreateActivityTask extends AsyncTask<Void, Void, String> {
+    protected class EditActivityTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
 
             String response = new String();
             try {
-                response = postCreateEventData();
+                response = postEditEventData();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
@@ -503,11 +331,38 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         protected void onPostExecute(final String response) {
-            mCreate = null;
+            mEdit = null;
             progressDialog.dismiss();
-            if (!response.isEmpty() && response.equals("Success")) {
-                Intent I = new Intent(context, HomeActivity.class);
-                startActivity(I);
+            String successString = "Success";
+            if (!response.isEmpty() && response.startsWith(successString)) {
+//                eventName, eventVenue, eventTime, eventDate, eventDesc, eventImage;
+                String jsonResponse = response.substring(successString.length());
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(jsonResponse);
+                    Event e = Event.createEvenFromJSON(jsonObject);
+                    EventDetailActivity.event = e;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+//                event.setName(eventName);
+//                event.setVenue(eventVenue);
+//                try {
+//                    event.setDate(Event.parseDateFormat.parse(eventDate+" "+eventTime+":00"));
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                event.setDescription(eventDesc);
+//                event.setImgURL();
+
+//                context=getApplicationContext();
+//                Intent I = new Intent(context, EventDetailActivity.class);
+//                Bundle informationBundle = new Bundle();
+//                informationBundle.putParcelable("event", event);
+//                I.putExtras(informationBundle);
+//                startActivity(I);
+                finish();
             } else {
                 CharSequence text = "Something went wrong!";
                 int duration = Toast.LENGTH_SHORT;
