@@ -23,10 +23,27 @@ public class Task {
     private String eventName;
     private TaskStatus taskStatus;
     private Date dueDate;
+    private Integer taskId;
+    private String description;
+    private String assignedUser;
 
-    public Task(String title, String eventName, String taskStatus, String dueDate) {
+    public Integer getTaskId() {
+        return taskId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getAssignedUser() {
+        return assignedUser;
+    }
+
+    public Task(String title, String eventName, String taskStatus, String dueDate, Integer taskId, String desc, String assignedUser) {
         this.title = title;
         this.eventName = eventName;
+        this.taskId = taskId;
+        this.description = desc;
         switch (taskStatus) {
             case "C":
                 this.taskStatus = TaskStatus.COMPLETED;
@@ -41,13 +58,16 @@ public class Task {
                 break;
         }
         try {
-            if (!dueDate.equals("None")) {
+            if (dueDate != null) {
                 this.dueDate = parseDateFormat.parse(dueDate);
             } else {
                 this.dueDate = null;
             }
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+        if (assignedUser != null) {
+            this.assignedUser = assignedUser;
         }
     }
 
@@ -80,9 +100,10 @@ public class Task {
                 String eventName = jsonEvent.getString("event_name");
                 String taskStatus = jsonEvent.getString("status");
                 String taskDue = jsonEvent.getString("due_date");
-                ;
-
-                Task task = new Task(taskName, eventName, taskStatus, taskDue);
+                Integer taskId = jsonEvent.getInt("id");
+                String desc = jsonEvent.getString("desc");
+                String assignedUser = jsonEvent.getString("assigned_to");
+                Task task = new Task(taskName, eventName, taskStatus, taskDue, taskId, desc, assignedUser);
                 tasksList.add(task);
             }
 

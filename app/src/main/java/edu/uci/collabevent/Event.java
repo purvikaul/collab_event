@@ -61,33 +61,6 @@ public class Event implements Parcelable {
 
     }
 
-//    public Event(String name, String date, String venue, Integer membersCount, Integer invitedCount) {
-//        this.name = name;
-//        this.venue = venue;
-//        this.membersCount = membersCount;
-//        this.invitedCount = invitedCount;
-//
-//    }
-//
-//    public Event(String name, String date, String venue) {
-//        this.name = name;
-//        try {
-//            this.date = parseDateFormat.parse(date);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        this.venue = venue;
-//    }
-//
-//    public Event(String name, String date) {
-//        this.name = name;
-//        try {
-//            this.date = parseDateFormat.parse(date);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public String getName() {
         return name;
     }
@@ -189,10 +162,12 @@ public class Event implements Parcelable {
         dest.writeString(this.name);
         dest.writeLong(this.date != null ? this.date.getTime() : -1);
         dest.writeString(this.venue);
+        dest.writeString(this.description);
         dest.writeSerializable(this.imgURL);
         dest.writeValue(this.membersCount);
         dest.writeValue(this.invitedCount);
         dest.writeValue(this.eventId);
+        dest.writeString(this.eventCreator);
     }
 
     protected Event(Parcel in) {
@@ -200,10 +175,12 @@ public class Event implements Parcelable {
         long tmpDate = in.readLong();
         this.date = tmpDate == -1 ? null : new Date(tmpDate);
         this.venue = in.readString();
+        this.description = in.readString();
         this.imgURL = (URL) in.readSerializable();
         this.membersCount = (Integer) in.readValue(Integer.class.getClassLoader());
         this.invitedCount = (Integer) in.readValue(Integer.class.getClassLoader());
         this.eventId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.eventCreator = in.readString();
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {

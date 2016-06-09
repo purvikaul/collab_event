@@ -81,6 +81,7 @@ public class EventDetailActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new AboutEventFragment(), "About");
+        adapter.addFragment(new TasksEventFragment(), "Tasks");
 //        adapter.addFragment(new TaskListFragment(), "Tasks");
 //        adapter.addFragment(new InvitationListFragment(), "Invitations");
         viewPager.setAdapter(adapter);
