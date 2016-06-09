@@ -49,7 +49,7 @@ public class TasksEventFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.activity_tasks, container, false);
+        View view = inflater.inflate(R.layout.event_tasks, container, false);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         taskCard = (RecyclerView) view.findViewById(R.id.taskCard);
         assert taskCard != null;
