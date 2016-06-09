@@ -2,7 +2,6 @@ package edu.uci.collabevent;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,15 +32,21 @@ public class TaskEventAdapter extends RecyclerView.Adapter<TaskEventAdapter.View
     public void onBindViewHolder(TaskEventAdapter.ViewHolder viewHolder, int position) {
         Task task = mTasks.get(position);
 
+        viewHolder.task = task;
         TextView titleView = viewHolder.taskTitle;
         titleView.setText(task.getTitle());
 
-        TextView eventNameView = viewHolder.eventName;
-        eventNameView.setText(task.getEventName());
+        TextView taskAssignmentView = viewHolder.taskAssignment;
+        if (task.getTaskStatus() == TaskStatus.UNASSIGNED) {
+            taskAssignmentView.setText("Unassigned");
+        } else {
+            taskAssignmentView.setText("Assigned To: " + task.getAssignedUser());
+        }
 
         TextView dateView = viewHolder.dueDate;
         if (task.getDueDate() != null) {
-            dateView.setText(Html.fromHtml("<b>Due: </b>") + Task.displayDateFormat.format(task.getDueDate()));
+            String dueText = new StringBuilder("Due: ").append(Task.displayDateFormat.format(task.getDueDate())).toString();
+            dateView.setText(dueText);
         }
         ImageView imageView = viewHolder.statusImage;
 
@@ -59,16 +64,25 @@ public class TaskEventAdapter extends RecyclerView.Adapter<TaskEventAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView taskTitle;
-        public TextView eventName;
+        public TextView taskAssignment;
         public TextView dueDate;
         public ImageView statusImage;
+        public Task task;
 
         public ViewHolder(View itemView) {
             super(itemView);
             taskTitle = (TextView) itemView.findViewById(R.id.task_name);
-            eventName = (TextView) itemView.findViewById(R.id.task_assignment);
+            taskAssignment = (TextView) itemView.findViewById(R.id.task_assignment);
             dueDate = (TextView) itemView.findViewById(R.id.due_date);
             statusImage = (ImageView) itemView.findViewById(R.id.status);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    // Write code to go to TaskDetail Activity here.
+                }
+            });
         }
 
     }
