@@ -67,7 +67,13 @@
             android:name=".EditEventActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Form" />
-        <activity android:name=".UserProfile"></activity>
+        <activity android:name=".UserProfile"/>
+        <activity
+            android:name=".CreateTaskActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Form"/>
+        <activity android:name=".AboutTaskActivity"/>
+        <activity android:name=".EditTaskActivity"></activity>
     </application>
 
 </manifest>

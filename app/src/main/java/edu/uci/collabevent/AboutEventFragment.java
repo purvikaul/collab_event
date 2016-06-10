@@ -89,13 +89,15 @@ public class AboutEventFragment extends Fragment {
                 Intent intent = new Intent(mContext, EditEventActivity.class);
                 Log.d("BITMAP", "Crossed2");
                 byte[] b = new byte[0];
-                Bitmap image = ((BitmapDrawable) mEventImage.getDrawable()).getBitmap();
-                if (image != null) {
+                try {
+                    Bitmap image = ((BitmapDrawable) mEventImage.getDrawable()).getBitmap();
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     image.compress(Bitmap.CompressFormat.JPEG, 50, baos); //bm is the bitmap object
                     b = baos.toByteArray();
                     Log.d("BITMAP", "Crossed3");
+                } catch (NullPointerException e) {
                 }
+
                 Bundle informationBundle = new Bundle();
                 informationBundle.putParcelable("event", event);
                 intent.putExtra("image", b);
@@ -112,12 +114,6 @@ public class AboutEventFragment extends Fragment {
     }
 
     public void setEventDetails() {
-
-//        Bundle bundle = this.getArguments();
-//        String name = bundle.getString("event_name", "Name");
-//        String venue = bundle.getString("event_venue", "TBD");
-//        String time = bundle.getString("event_time", "TBD");
-//        String desc = bundle.getString("event_desc", "Event Description ...");
 
         mEventName.setText(event.getName());
         mEventVenue.setText(event.getVenue());
@@ -141,43 +137,4 @@ public class AboutEventFragment extends Fragment {
         setEventDetails();
     }
 
-    //
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
 }

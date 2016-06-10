@@ -47,7 +47,7 @@ public class EventListFragment extends Fragment {
         eventCard = (RecyclerView) view.findViewById(R.id.eventCard);
         final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         assert eventCard != null;
-        fetchEvents(true);
+        //   fetchEvents(true);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -69,6 +69,12 @@ public class EventListFragment extends Fragment {
 //    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 //        super.onActivityCreated(savedInstanceState);
 //    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchEvents(true);
+    }
 
     private void fetchEvents(Boolean showProgess) {
         Context context = getActivity();

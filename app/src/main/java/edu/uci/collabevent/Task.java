@@ -1,5 +1,7 @@
 package edu.uci.collabevent;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -14,9 +16,9 @@ import java.util.Date;
 /**
  * Created by user on 30-05-2016.
  */
-public class Task {
+public class Task implements Parcelable {
 
-    public static SimpleDateFormat parseDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
+    public static SimpleDateFormat parseDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE, d MMM");
 
     private String title;
@@ -87,6 +89,57 @@ public class Task {
         return dueDate;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
+        dest.writeLong(this.dueDate != null ? this.dueDate.getTime() : -1);
+        dest.writeString(this.eventName);
+        dest.writeString(this.taskStatus.toString());
+        dest.writeValue(this.taskId);
+        dest.writeString(this.description);
+        dest.writeString(this.assignedUser);
+    }
+
+    protected Task(Parcel in) {
+        this.title = in.readString();
+        long tmpDate = in.readLong();
+        this.dueDate = tmpDate == -1 ? null : new Date(tmpDate);
+        this.eventName = in.readString();
+        String status = in.readString();
+        switch (status) {
+            case "C":
+                this.taskStatus = TaskStatus.COMPLETED;
+                break;
+            case "A":
+                this.taskStatus = TaskStatus.ASSIGNED;
+                break;
+            case "UA":
+                this.taskStatus = TaskStatus.UNASSIGNED;
+                break;
+            default:
+                break;
+        }
+        this.taskId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.description = in.readString();
+        this.assignedUser = in.readString();
+    }
+
+    public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
+        @Override
+        public Task createFromParcel(Parcel source) {
+            return new Task(source);
+        }
+
+        @Override
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
     public static ArrayList<Task> createTasksFromJSON(String TasksJSON) {
         ArrayList<Task> tasksList = new ArrayList<>();
         Log.d("DEBUG-JSON", TasksJSON);
@@ -96,14 +149,7 @@ public class Task {
 
             for (int i = 0; i < reader.length(); i++) {
                 JSONObject jsonEvent = reader.getJSONObject(i);
-                String taskName = jsonEvent.getString("title");
-                String eventName = jsonEvent.getString("event_name");
-                String taskStatus = jsonEvent.getString("status");
-                String taskDue = jsonEvent.getString("due_date");
-                Integer taskId = jsonEvent.getInt("id");
-                String desc = jsonEvent.getString("desc");
-                String assignedUser = jsonEvent.getString("assigned_to");
-                Task task = new Task(taskName, eventName, taskStatus, taskDue, taskId, desc, assignedUser);
+                Task task = createTaskFromJSON(jsonEvent);
                 tasksList.add(task);
             }
 
@@ -112,5 +158,18 @@ public class Task {
         }
 
         return tasksList;
+    }
+
+    public static Task createTaskFromJSON(JSONObject jsonEvent) throws JSONException {
+        String taskName = jsonEvent.getString("title");
+        String eventName = jsonEvent.getString("event_name");
+        String taskStatus = jsonEvent.getString("status");
+        String taskDue = jsonEvent.getString("due_date");
+        Integer taskId = jsonEvent.getInt("id");
+        String desc = jsonEvent.getString("desc");
+        String assignedUser = jsonEvent.getString("assigned_to");
+        Task task = new Task(taskName, eventName, taskStatus, taskDue, taskId, desc, assignedUser);
+        return task;
+
     }
 }

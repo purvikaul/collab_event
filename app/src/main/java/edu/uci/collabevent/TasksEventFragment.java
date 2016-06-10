@@ -2,18 +2,22 @@ package edu.uci.collabevent;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,20 +54,55 @@ public class TasksEventFragment extends Fragment {
         // Inflate the layout for this fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.event_tasks, container, false);
+        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         taskCard = (RecyclerView) view.findViewById(R.id.taskCard);
+        registerForContextMenu(taskCard);
         assert taskCard != null;
         EventDetailActivity parentActivity = (EventDetailActivity) getActivity();
         event = parentActivity.getEvent();
-        fetchTasks(true);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 fetchTasks(false);
             }
         });
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent I = new Intent(getActivity(), CreateTaskActivity.class);
+                startActivity(I);
+            }
+        });
         return view;
 
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Select The Action");
+        menu.add(0, v.getId(), 0, "Call");//groupId, itemId, order, title
+        menu.add(0, v.getId(), 0, "SMS");
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == "Call") {
+            Toast.makeText(getContext(), "calling code", Toast.LENGTH_LONG).show();
+        } else if (item.getTitle() == "SMS") {
+            Toast.makeText(getContext(), "sending sms code", Toast.LENGTH_LONG).show();
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchTasks(true);
     }
 
     private void fetchTasks(Boolean showProgress) {

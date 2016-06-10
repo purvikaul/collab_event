@@ -26,8 +26,10 @@
     <string name="events_list_url">android/events_list/</string>
     <string name="tasks_list_url">android/tasks_list/</string>
     <string name="create_event_url">android/create_event/</string>
+    <string name="create_task_url">android/create_task/</string>
     <string name="edit_event_url">android/edit_event/</string>
     <string name="friend_list">android/friends_list/</string>
+    <string name="members_list">android/members_list/</string>
     <string name="invitations_list_url">android/invitations_list/</string>
     <string name="invitation_accept_url">android/accept_invite/</string>
     <string name="invitation_reject_url">android/reject_invite/</string>

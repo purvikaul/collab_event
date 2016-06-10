@@ -2,6 +2,7 @@ package edu.uci.collabevent;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,8 +11,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,6 +57,21 @@ public class TaskListFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == "Edit") {
+            Intent intent = new Intent(getContext(), EditTaskActivity.class);
+            intent.putExtra("task_id", item.getItemId());
+            Toast.makeText(getContext(), "calling code" + item.getItemId(), Toast.LENGTH_LONG).show();
+            startActivity(intent);
+        } else if (item.getTitle() == "SMS") {
+            Toast.makeText(getContext(), "sending sms code", Toast.LENGTH_LONG).show();
+        } else {
+            return false;
+        }
+        return true;
     }
 
     private void fetchTasks(Boolean showProgress) {

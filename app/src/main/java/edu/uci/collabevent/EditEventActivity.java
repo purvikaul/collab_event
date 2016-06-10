@@ -297,6 +297,8 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
 
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                bitmap = Bitmap.createScaledBitmap(bitmap, 400, 300, true);
+
                 Log.d("TAG", String.valueOf(bitmap));
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -345,23 +347,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-//                event.setName(eventName);
-//                event.setVenue(eventVenue);
-//                try {
-//                    event.setDate(Event.parseDateFormat.parse(eventDate+" "+eventTime+":00"));
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//                event.setDescription(eventDesc);
-//                event.setImgURL();
-
-//                context=getApplicationContext();
-//                Intent I = new Intent(context, EventDetailActivity.class);
-//                Bundle informationBundle = new Bundle();
-//                informationBundle.putParcelable("event", event);
-//                I.putExtras(informationBundle);
-//                startActivity(I);
                 finish();
             } else {
                 CharSequence text = "Something went wrong!";
